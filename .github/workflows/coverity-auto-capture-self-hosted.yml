@@ -42,8 +42,6 @@ jobs:
       # First check out the code. Note this is a shallow checkout, for the
       # version of code being built.
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
 
       # Fetch scripts for automating GitHub tasks from another repository.
       # Also set up necessary Python dependencies.
@@ -151,7 +149,10 @@ jobs:
       - name: Comment on pull request (Incremental)
         run: |
           export COVERITY_STREAM_NAME=${GITHUB_REPOSITORY##*/}-$BASE_BRANCH
-          #git fetch --unshallow
+          # This will fetch the entire history - which may be impactful on performance.
+          # This is necessary in order to 'git blame' and determine which commits are
+          # associated with which files and lines changed.
+          git fetch --unshallow
           python3 ./synopsys-github-tools/github-coverity-comment-on-pull-request.py \
             --coverity-json coverity-incremental-results.json \
             --url $COVERITY_URL \
