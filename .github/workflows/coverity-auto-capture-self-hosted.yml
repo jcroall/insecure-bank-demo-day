@@ -48,7 +48,7 @@ jobs:
       - name: Get Synopsys GitHub Tools
         run: |
           git clone -q --depth 1 $SYNOPSYS_GITHUB_TOOLS_REPO
-          pip3 install --upgrade pandas requests==2.26.0 urllib3==1.26.7 jsonapi-requests==0.6.2 tenacity==6.2.0 pygithub
+          pip3 install --upgrade pandas requests==2.26.0 urllib3==1.26.7 jsonapi-requests==0.6.2 tenacity==6.2.0 pygithub suds
 
       # Save the Coverity license from a GitHub Secret to a file in order to pass to the Coverity tools
       - name: Coverity License
@@ -128,9 +128,10 @@ jobs:
             echo "Scan changed file ${changed_file}."
           done
           cov-capture --dir idir --source-list coverity-files-to-scan.txt
-          cov-run-desktop --dir idir --strip-path `pwd` --url $COVERITY_URL --stream $COVERITY_STREAM_NAME --present-in-reference false \
+          cov-run-desktop --dir idir --security-file coverity-license.dat --strip-path `pwd` --url $COVERITY_URL --stream $COVERITY_STREAM_NAME --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-incremental-results.json \
+            $COVERITY_CHECKERS \
             ${{ steps.changeset.outputs.added_modified }}
           $COVERITY_HOME/sigma/bin/sigma analyze
         env:
@@ -148,6 +149,9 @@ jobs:
       - name: Comment on pull request (Incremental)
         run: |
           export COVERITY_STREAM_NAME=${GITHUB_REPOSITORY##*/}-$BASE_BRANCH
+          # This will fetch the entire history - which may be impactful on performance.
+          # This is necessary in order to 'git blame' and determine which commits are
+          # associated with which files and lines changed.
           git fetch --unshallow
           python3 ./synopsys-github-tools/github-coverity-comment-on-pull-request.py \
             --coverity-json coverity-incremental-results.json \
