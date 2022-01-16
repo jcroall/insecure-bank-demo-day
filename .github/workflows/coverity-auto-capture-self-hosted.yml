@@ -42,6 +42,8 @@ jobs:
       # First check out the code. Note this is a shallow checkout, for the
       # version of code being built.
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       # Fetch scripts for automating GitHub tasks from another repository.
       # Also set up necessary Python dependencies.
