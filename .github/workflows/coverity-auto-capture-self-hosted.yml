@@ -1,5 +1,6 @@
 name: Coverity
 
+
 on:
   push:
     branches: [ master ]
