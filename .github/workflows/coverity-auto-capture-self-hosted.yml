@@ -128,7 +128,7 @@ jobs:
             echo "Scan changed file ${changed_file}."
           done
           cov-capture --dir idir --source-list coverity-files-to-scan.txt
-          cov-run-desktop --dir idir --strip-path `pwd` --url $COVERITY_URL --stream $COVERITY_STREAM_NAME --present-in-reference false \
+          cov-run-desktop --dir idir --security-file coverity-license.dat --strip-path `pwd` --url $COVERITY_URL --stream $COVERITY_STREAM_NAME --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-incremental-results.json \
             ${{ steps.changeset.outputs.added_modified }}
