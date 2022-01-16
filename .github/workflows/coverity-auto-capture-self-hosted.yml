@@ -150,7 +150,7 @@ jobs:
       - name: Comment on pull request (Incremental)
         run: |
           export COVERITY_STREAM_NAME=${GITHUB_REPOSITORY##*/}-$BASE_BRANCH
-          git fetch --unshallow
+          #git fetch --unshallow
           python3 ./synopsys-github-tools/github-coverity-comment-on-pull-request.py \
             --coverity-json coverity-incremental-results.json \
             --url $COVERITY_URL \
