@@ -138,9 +138,11 @@ jobs:
           #./configure
           #cov-run-desktop --dir idir --security-file coverity-license.dat --strip-path `pwd` --url $COVERITY_URL --stream $COVERITY_STREAM_NAME --build make all
           # XXX For ProFtpd C/C++ project
-          cov-capture --dir idir --source-list coverity-files-to-scan.txt
+          #cov-capture --dir idir --source-list coverity-files-to-scan.txt
+          cov-capture --dir idir --project-dir .
           cov-run-desktop --dir idir --security-file coverity-license.dat --strip-path `pwd` --url $COVERITY_URL --stream $COVERITY_STREAM_NAME --present-in-reference false \
             --ignore-uncapturable-inputs true \
+            --webapp-security \
             --json-output-v7 coverity-incremental-results.json \
             $COVERITY_CHECKERS \
             ${{ steps.changeset.outputs.added_modified }}
