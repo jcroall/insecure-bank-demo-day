@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/jsp/template/tags.jsp"%>
 
+
 <%@ include file="/WEB-INF/jsp/template/header.jsp"%>
 
 <body class="static-tables">
